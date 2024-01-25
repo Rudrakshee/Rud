@@ -1,0 +1,33 @@
+import nltk
+from nltk.chat.util import Chat, reflections
+
+# Define a list of patterns and responses for the chatbot
+patterns = [
+    (r'Hi|Hello|Hey', ['Hello! How can I help you with your college admission questions?']),
+    (r'What is your name?', ['I am a college admission assistant. You can call me AdmissionBot.']),
+    (r'(.*) college admission', ['I can help you with questions about college admission requirements, application process, and more. Just ask!']),
+    (r'(.*) application process', ['The application process varies between colleges, but generally, it involves submitting your transcripts, standardized test scores, and an application form. Do you have specific questions about a particular college?']),
+    (r'(.*) requirements', ['College admission requirements typically include high school transcripts, standardized test scores (SAT or ACT), letters of recommendation, and a personal statement. Different colleges may have specific requirements.']),
+    (r'Can you help me choose a college?', ['Certainly! What are your preferences or criteria for choosing a college?']),
+    (r'(.*) financial aid', ['Many colleges offer financial aid programs. You can check with the financial aid office of the specific college you're interested in or fill out the FAFSA form for federal aid.']),
+    (r'exit', ['Goodbye! If you have more questions, feel free to ask.']),
+]
+
+# Create a Chat instance
+college_admission_chatbot = Chat(patterns, reflections)
+
+# Function to start the chat
+def college_admission_chat():
+    print("Hello! I'm here to help you with your college admission questions.")
+    print("You can type 'exit' to end the conversation.")
+    while True:
+        user_input = input("You: ")
+        if user_input.lower() == 'exit':
+            print("Goodbye! If you have more questions, feel free to ask.")
+            break
+        else:
+            response = college_admission_chatbot.respond(user_input)
+            print("AdmissionBot:", response)
+
+# Start the chat
+college_admission_chat()
