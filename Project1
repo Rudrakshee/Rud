@@ -1,0 +1,39 @@
+import socketio
+import requests
+
+# Set up Socket.IO server
+sio = socketio.Server(cors_allowed_origins='*')
+app = socketio.WSGIApp(sio)
+
+# Function to greet the user
+def greet_user(sid):
+    sio.emit('message', {'text': 'Hello! I am your GitHub chatbot. How can I help you today?'}, room=sid)
+
+# Function to answer GitHub-related questions
+def answer_github_question(sid, question):
+    # Implement GitHub API interactions here
+    # For simplicity, let's just echo the question for now
+    response = f"Your GitHub question: {question}"
+    sio.emit('message', {'text': response}, room=sid)
+
+# Define event handlers
+@sio.event
+def connect(sid, environ):
+    greet_user(sid)
+
+@sio.event
+def message(sid, data):
+    # Handle user messages here
+    user_message = data.get('text', '')
+    
+    # Check for GitHub-related questions
+    if 'github' in user_message.lower():
+        answer_github_question(sid, user_message)
+    else:
+        # Default response for non-GitHub questions
+        sio.emit('message', {'text': 'I am a GitHub chatbot. Ask me about GitHub!'}, room=sid)
+
+# Run the server
+if __name__ == '__main__':
+    import eventlet
+    eventlet.wsgi.server(eventlet.listen(('localhost', 5000)), app)
